@@ -28,8 +28,8 @@
  */
 /* $Id$ */ 
 
-#ifndef _PHP3_YP_H
-#define _PHP3_YP_H
+#ifndef _PHP_YP_H
+#define _PHP_YP_H
 
 #if COMPILE_DL
 #undef HAVE_YP
@@ -59,4 +59,4 @@ void php3_info_yp(ZEND_MODULE_INFO_FUNC_ARGS);
 
 #define phpext_yp_ptr yp_module_ptr
 
-#endif /* _PHP3_YP_H */
+#endif /* _PHP_YP_H */
