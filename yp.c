@@ -64,7 +64,7 @@ zend_module_entry yp_module_entry = {
 	PHP_RINIT(yp),
 	NULL,
 	PHP_MINFO(yp),
-    NO_VERSION_YET,
+	PHP_YP_VERSION,
 	STANDARD_MODULE_PROPERTIES
 };
 
@@ -416,7 +416,8 @@ PHP_RINIT_FUNCTION(yp)
 PHP_MINFO_FUNCTION(yp)
 {
 	php_info_print_table_start();
-	php_info_print_table_row(2, "YP Support", "enabled");
+	php_info_print_table_header(2, "YP Support", "enabled");
+	php_info_print_table_row(2, "Version", PHP_YP_VERSION);
 	php_info_print_table_end();
 }
 #endif /* HAVE_YP */
