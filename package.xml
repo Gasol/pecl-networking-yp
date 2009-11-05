@@ -1,46 +1,59 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE package SYSTEM "../pear/package.dtd">
-<package>
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.0" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
  <name>yp</name>
+ <channel>pecl.php.net</channel>
  <summary>YP/NIS functions</summary>
- <maintainers>
-  <maintainer>
-   <user>???</user>
-   <name>Stephanie Wehner</name>
-   <email>_@r4k.net</email>
-   <role>lead</role>
-  </maintainer>
-  <maintainer>
-   <user>???</user>
-   <name>Fredrik Ohrn</name>
-   <email>???@php.net</email>
-   <role>lead</role>
-  </maintainer>
- </maintainers>
- <description>
-NIS (formerly called Yellow Pages) allows network management 
+ <description>NIS (formerly called Yellow Pages) allows network management 
 of important administrative files (e.g. the password file). 
+ 
  </description>
- <license>PHP</license>
- <release>
-  <state>beta</state>
-  <version>5.0.0rc1</version>
-  <date>2004-03-19</date>
-  <notes>
+ <lead>
+  <name>Stephanie Wehner</name>
+  <user>???</user>
+  <email>_@r4k.net</email>
+  <active>yes</active>
+ </lead>
+ <lead>
+  <name>Fredrik Ohrn</name>
+  <user>???</user>
+  <email>???@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2009-11-05</date>
+ <time>17:58:17</time>
+ <version>
+  <release>5.0.0rc1</release>
+  <api>5.0.0rc1</api>
+ </version>
+ <stability>
+  <release>beta</release>
+  <api>beta</api>
+ </stability>
+ <license uri="http://www.php.net/license">PHP</license>
+ <notes>
 package.xml added to support intallation using pear installer
-  </notes>
-  <filelist>
-   <file role="doc" name="CREDITS"/>
-   <file role="src" name="config.m4"/>
-   <file role="src" name="yp.c"/>
-   <file role="src" name="php_yp.h"/>
-  </filelist>
-  <deps>
-   <dep type="php" rel="ge" version="5" />
-   <!-- doesn't work yet <dep type="os"  rel="has" name="unix"/> -->
-  </deps>
- </release>
+ </notes>
+ <contents>
+  <dir name="/">
+   <file name="config.m4" role="src" />
+   <file name="CREDITS" role="doc" />
+   <file name="php_yp.h" role="src" />
+   <file name="yp.c" role="src" />
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <providesextension>yp</providesextension>
+ <extsrcrelease />
 </package>
-<!--
-vim:et:ts=1:sw=1
--->
