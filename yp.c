@@ -41,7 +41,7 @@ PHP_YP_API php_yp_globals yp_globals;
 
 /* }}} */
 
-function_entry yp_functions[] = {
+zend_function_entry yp_functions[] = {
 	PHP_FE(yp_get_default_domain, NULL)
 	PHP_FE(yp_order, NULL)
 	PHP_FE(yp_master, NULL)
