@@ -56,7 +56,7 @@ zend_function_entry yp_functions[] = {
 };
 
 zend_module_entry yp_module_entry = {
-    STANDARD_MODULE_HEADER,
+	STANDARD_MODULE_HEADER,
 	"yp",
 	yp_functions,
 	PHP_MINIT(yp),
@@ -90,26 +90,25 @@ PHP_FUNCTION(yp_get_default_domain)
 }
 /* }}} */
 
-/* {{{ proto int yp_order(string domain, string map)            
+/* {{{ proto int yp_order(string domain, string map)
    Returns the order number or false */
 PHP_FUNCTION(yp_order)
 {
-	pval **domain, **map;
+	char *domain = NULL, *map = NULL;
+	int domain_len = 0, map_len = 0;
 
 #if SOLARIS_YP
-	unsigned long outval;
+	unsigned long outval = 0;
 #else
-	int outval;
+	int outval = 0;
 #endif
 
-	if((ZEND_NUM_ARGS() != 2) || zend_get_parameters_ex(2,&domain,&map) == FAILURE) {
-		WRONG_PARAM_COUNT;
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss",
+				&domain, &domain_len, &map, &map_len) == FAILURE) {
+		RETURN_FALSE;
 	}
 
-	convert_to_string_ex(domain);
-	convert_to_string_ex(map);
-
-	if((YP(error) = yp_order(Z_STRVAL_PP (domain), Z_STRVAL_PP (map), &outval))) {
+	if((YP(error) = yp_order(domain, map, &outval))) {
 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", yperr_string (YP(error)));
 		RETURN_FALSE;
 	}
@@ -122,22 +121,20 @@ PHP_FUNCTION(yp_order)
    Returns the machine name of the master */
 PHP_FUNCTION(yp_master)
 {
-	pval **domain, **map;
-	char *outname;
+	char *domain = NULL, *map = NULL, *outname = NULL;
+	int domain_len = 0, map_len = 0;
 
-	if((ZEND_NUM_ARGS() != 2) || zend_get_parameters_ex(2,&domain,&map) == FAILURE) {
-		WRONG_PARAM_COUNT;
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss",
+				&domain, &domain_len, &map, &map_len) == FAILURE) {
+		RETURN_FALSE;
 	}
 
-	convert_to_string_ex(domain);
-	convert_to_string_ex(map);
-
-	if((YP(error) = yp_master(Z_STRVAL_PP (domain), Z_STRVAL_PP (map), &outname))) {
+	if((YP(error) = yp_master(domain, map, &outname))) {
 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", yperr_string (YP(error)));
 		RETURN_FALSE;
 	}
 
-	RETVAL_STRING(outname,1);
+	RETVAL_STRING(outname, 1);
 }
 /* }}} */
 
@@ -145,24 +142,20 @@ PHP_FUNCTION(yp_master)
    Returns the matched line or false */
 PHP_FUNCTION(yp_match)
 {
-	pval **domain, **map, **key;
-	char *outval;
-	int outvallen;
+	char *domain = NULL, *map = NULL, *key = NULL, *outval = NULL;
+	int domain_len = 0, map_len = 0, key_len = 0, outvallen = 0;
 
-	if((ZEND_NUM_ARGS() != 3) || zend_get_parameters_ex(3,&domain,&map,&key) == FAILURE) {
-		WRONG_PARAM_COUNT;
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sss", &domain,
+				&domain_len, &map, &map_len, &key, &key_len) == FAILURE) {
+		RETURN_FALSE;
 	}
 
-	convert_to_string_ex(domain);
-	convert_to_string_ex(map);
-	convert_to_string_ex(key);
-
-	if((YP(error) = yp_match(Z_STRVAL_PP (domain), Z_STRVAL_PP (map), Z_STRVAL_PP (key), Z_STRLEN_PP (key), &outval, &outvallen))) {
+	if((YP(error) = yp_match(domain, map, key, key_len, &outval, &outvallen))) {
 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", yperr_string (YP(error)));
 		RETURN_FALSE;
 	}
 
-	RETVAL_STRINGL(outval,outvallen,1);
+	RETVAL_STRINGL(outval, outvallen, 1);
 }
 /* }}} */
 
@@ -170,27 +163,21 @@ PHP_FUNCTION(yp_match)
    Returns the first key as array with $var[$key] and the the line as the value */
 PHP_FUNCTION(yp_first)
 {
-	pval **domain, **map;
-	char *outval, *outkey;
-	int outvallen, outkeylen;
+	char *domain = NULL, *map = NULL, *outkey = NULL, *outval = NULL;
+	int domain_len = 0, map_len = 0, outkey_len, outval_len;
 
-	if((ZEND_NUM_ARGS() != 2) || zend_get_parameters_ex(2,&domain,&map) == FAILURE) {
-		WRONG_PARAM_COUNT;
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss",
+				&domain, &domain_len, &map, &map_len) == FAILURE) {
+		RETURN_FALSE;
 	}
 
-	convert_to_string_ex(domain);
-	convert_to_string_ex(map);
-
-	if((YP(error) = yp_first(Z_STRVAL_PP (domain), Z_STRVAL_PP (map), &outkey, &outkeylen, &outval, &outvallen))) {
+	if((YP(error) = yp_first(domain, map, &outkey, &outkey_len, &outval, &outval_len))) {
 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", yperr_string (YP(error)));
 		RETURN_FALSE;
 	}
-	array_init(return_value);
-	add_assoc_stringl_ex(return_value,outkey,outkeylen+1,outval,outvallen,1);
 
-	/* Deprecated */
-	add_assoc_stringl(return_value,"key",outkey,outkeylen,1);
-	add_assoc_stringl(return_value,"value",outval,outvallen,1);
+	array_init(return_value);
+	add_assoc_stringl_ex(return_value, outkey, outkey_len + 1, outval, outval_len, 1);
 }
 /* }}} */
 
@@ -198,25 +185,23 @@ PHP_FUNCTION(yp_first)
    Returns an array with $var[$key] and the the line as the value */
 PHP_FUNCTION(yp_next)
 {
-	pval **domain, **map, **key;
-	char *outval, *outkey;
-	int outvallen, outkeylen;
+	char *domain = NULL, *map = NULL, *key = NULL;
+	int domain_len = 0, map_len = 0, key_len = 0;
+	char *outkey = NULL, *outval = NULL;
+	int outkey_len = 0, outval_len = 0;
 
-	if((ZEND_NUM_ARGS() != 3) || zend_get_parameters_ex(3,&domain,&map,&key) == FAILURE) {
-		WRONG_PARAM_COUNT;
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sss", &domain,
+				&domain_len, &map, &map_len, &key, &key_len) == FAILURE) {
+		RETURN_FALSE;
 	}
 
-	convert_to_string_ex(domain);
-	convert_to_string_ex(map);
-	convert_to_string_ex(key);
-
-	if((YP(error) = yp_next(Z_STRVAL_PP (domain), Z_STRVAL_PP (map), Z_STRVAL_PP (key), Z_STRLEN_PP (key), &outkey, &outkeylen, &outval, &outvallen))) {
+	if((YP(error) = yp_next(domain, map, key, key_len, &outkey, &outkey_len, &outval, &outval_len))) {
 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", yperr_string (YP(error)));
 		RETURN_FALSE;
 	}
-	
+
 	array_init(return_value);
-	add_assoc_stringl_ex(return_value,outkey,outkeylen+1,outval,outvallen,1);
+	add_assoc_stringl_ex(return_value, outkey, outkey_len + 1, outval, outval_len, 1);
 }
 /* }}} */
 
@@ -224,45 +209,28 @@ PHP_FUNCTION(yp_next)
  */
 static int php_foreach_all (int instatus, char *inkey, int inkeylen, char *inval, int invallen, char *indata)
 {
-	int r;
-	zval *status, *key, *value;
-	zval **args [3];
+	int is_stop = 0;
+	zval *args;
 	zval *retval;
 	TSRMLS_FETCH();
 
-	args[0] = &status;
-	args[1] = &key;
-	args[2] = &value;
+	MAKE_STD_ZVAL(args);
+	array_init(args);
+	add_index_long(args, 0, instatus);
+	add_index_stringl(args, 1, inkey, inkeylen, 1);
+	add_index_stringl(args, 2, inval, invallen, 1);
 
-	MAKE_STD_ZVAL (status);
-	ZVAL_LONG (status, ypprot_err (instatus));
+	php_yp_all_callback *cb = (php_yp_all_callback *) indata;
+	zend_fcall_info_args(&cb->fci, args TSRMLS_CC);
+	zend_fcall_info_call(&cb->fci, &cb->fcc, &retval, args TSRMLS_CC);
+	zend_fcall_info_args_clear(&cb->fci, 1);
 
-	MAKE_STD_ZVAL (key);
-	ZVAL_STRINGL (key, inkey, inkeylen, 1);
-
-	MAKE_STD_ZVAL (value);
-	ZVAL_STRINGL (value, inval, invallen, 1);
-
-	if(call_user_function_ex(CG(function_table), NULL, *((zval **)indata), &retval, 3, args, 0, NULL TSRMLS_CC) != SUCCESS)
-	{
-		zval_ptr_dtor(&status);
-		zval_ptr_dtor(&key);
-		zval_ptr_dtor(&value);
-
-		php_error_docref(NULL TSRMLS_CC, E_ERROR, "Function call failed");
-		return 1;
+	if (retval) {
+		is_stop = zval_is_true(retval);
+		zval_ptr_dtor(&retval);
 	}
 
-	convert_to_long_ex(&retval);
-	r = Z_LVAL_P (retval);
-
-	zval_ptr_dtor(&retval);
-
-	zval_ptr_dtor(&status);
-	zval_ptr_dtor(&key);
-	zval_ptr_dtor(&value);
-
-	return r;
+	return is_stop;
 }
 /* }}} */
 
@@ -270,21 +238,24 @@ static int php_foreach_all (int instatus, char *inkey, int inkeylen, char *inval
    Traverse the map and call a function on each entry */
 PHP_FUNCTION(yp_all)
 {
-	pval **domain, **map, **php_callback;
+	char *domain = NULL, *map = NULL;
+	int domain_len = 0, map_len = 0;
+	php_yp_all_callback *foreach_cb = emalloc(sizeof(php_yp_all_callback));
+
 	struct ypall_callback callback;
 
-	if((ZEND_NUM_ARGS() != 3) || zend_get_parameters_ex(3,&domain,&map,&php_callback) == FAILURE) {
-		WRONG_PARAM_COUNT;
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssf",
+				&domain, &domain_len, &map, &map_len,
+				&foreach_cb->fci, &foreach_cb->fcc) == FAILURE) {
+		RETURN_FALSE;
 	}
 
-	convert_to_string_ex(domain);
-	convert_to_string_ex(map);
-
 	callback.foreach = php_foreach_all;
-	callback.data = (char *) php_callback;
+	callback.data = foreach_cb;
 
-	yp_all(Z_STRVAL_PP(domain),Z_STRVAL_PP(map),&callback);
+	yp_all(domain, map, &callback);
 
+	efree(foreach_cb);
 	RETURN_FALSE;
 }
 /* }}} */
@@ -325,22 +296,21 @@ static int php_foreach_cat (int instatus, char *inkey, int inkeylen, char *inval
    Return an array containing the entire map */
 PHP_FUNCTION(yp_cat)
 {
-	pval **domain, **map;
+	char *domain = NULL, *map = NULL;
+	int domain_len = 0, map_len = 0;
 	struct ypall_callback callback;
 
-	if((ZEND_NUM_ARGS() != 2) || zend_get_parameters_ex(2,&domain,&map) == FAILURE) {
-		WRONG_PARAM_COUNT;
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss",
+				&domain, &domain_len, &map, &map_len) == FAILURE) {
+		RETURN_FALSE;
 	}
-
-	convert_to_string_ex(domain);
-	convert_to_string_ex(map);
 
 	array_init(return_value);
 
 	callback.foreach = php_foreach_cat;
 	callback.data = (char *) return_value;
 
-	yp_all(Z_STRVAL_PP(domain),Z_STRVAL_PP(map),&callback);
+	yp_all(domain, map, &callback);
 }
 /* }}} */
 
@@ -360,20 +330,18 @@ PHP_FUNCTION(yp_errno)
    Returns the corresponding error string for the given error code */
 PHP_FUNCTION(yp_err_string)
 {
-	pval **error;
-	char *string;
+	int errcode = 0;
+	char *string = NULL;
 
-	if((ZEND_NUM_ARGS() != 1) || zend_get_parameters_ex(1,&error) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-
-	convert_to_long_ex(error);
-
-	if((string = yperr_string(Z_LVAL_PP(error))) == NULL) {
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &errcode) == FAILURE) {
 		RETURN_FALSE;
 	}
 
-	RETVAL_STRING(string,1);
+	if((string = yperr_string(errcode)) == NULL) {
+		RETURN_FALSE;
+	}
+
+	RETVAL_STRING(string, 1);
 }
 /* }}} */
 

@@ -54,6 +54,12 @@ typedef struct {
 	int error;
 } php_yp_globals;
 
+typedef struct {
+	zend_fcall_info fci;
+	zend_fcall_info_cache fcc;
+} php_yp_all_callback;
+
+
 #ifdef ZTS
 #define YP(v) TSRMG(yp_globals_id, php_yp_globals *, v)
 #else
