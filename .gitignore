@@ -1,0 +1,58 @@
+# Object files
+*.o
+*.ko
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# http://www.gnu.org/software/automake
+
+Makefile
+Makefile.fragments
+Makefile.global
+Makefile.objects
+Makefile.in
+
+# http://www.gnu.org/software/autoconf
+
+/autom4te.cache
+/aclocal.m4
+/acinclude.m4
+/compile
+/configure
+/depcomp
+/install-sh
+/missing
+/config.guess
+/config.sub
+/config.h
+/config.h.in
+/config.log
+/config.nice
+/config.status
+/configure.in
+/ltmain.sh
+/libtool
+/mkinstalldirs
+/run-tests.php
+
+/.deps
+/.libs
+/.vagrant
+/build
+/modules
+/tmp-php.ini
+/yp.la
+/yp.lo
