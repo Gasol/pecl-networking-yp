@@ -40,6 +40,7 @@ package.xml added to support intallation using pear installer
   <dir name="/">
    <file name="config.m4" role="src" />
    <file name="CREDITS" role="doc" />
+   <file name="LICENSE" role="doc" />
    <file name="php_yp.h" role="src" />
    <file name="yp.c" role="src" />
   </dir> <!-- / -->
