@@ -105,7 +105,7 @@ PHP_FUNCTION(yp_order)
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss",
 				&domain, &domain_len, &map, &map_len) == FAILURE) {
-		RETURN_FALSE;
+        return;
 	}
 
 	if((YP(error) = yp_order(domain, map, &outval))) {
@@ -126,7 +126,7 @@ PHP_FUNCTION(yp_master)
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss",
 				&domain, &domain_len, &map, &map_len) == FAILURE) {
-		RETURN_FALSE;
+        return;
 	}
 
 	if((YP(error) = yp_master(domain, map, &outname))) {
@@ -147,7 +147,7 @@ PHP_FUNCTION(yp_match)
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sss", &domain,
 				&domain_len, &map, &map_len, &key, &key_len) == FAILURE) {
-		RETURN_FALSE;
+        return;
 	}
 
 	if((YP(error) = yp_match(domain, map, key, key_len, &outval, &outvallen))) {
@@ -168,7 +168,7 @@ PHP_FUNCTION(yp_first)
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss",
 				&domain, &domain_len, &map, &map_len) == FAILURE) {
-		RETURN_FALSE;
+        return;
 	}
 
 	if((YP(error) = yp_first(domain, map, &outkey, &outkey_len, &outval, &outval_len))) {
@@ -192,7 +192,7 @@ PHP_FUNCTION(yp_next)
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sss", &domain,
 				&domain_len, &map, &map_len, &key, &key_len) == FAILURE) {
-		RETURN_FALSE;
+        return;
 	}
 
 	if((YP(error) = yp_next(domain, map, key, key_len, &outkey, &outkey_len, &outval, &outval_len))) {
@@ -247,7 +247,7 @@ PHP_FUNCTION(yp_all)
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssf",
 				&domain, &domain_len, &map, &map_len,
 				&foreach_cb->fci, &foreach_cb->fcc) == FAILURE) {
-		RETURN_FALSE;
+        return;
 	}
 
 	callback.foreach = php_foreach_all;
@@ -302,7 +302,7 @@ PHP_FUNCTION(yp_cat)
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss",
 				&domain, &domain_len, &map, &map_len) == FAILURE) {
-		RETURN_FALSE;
+        return;
 	}
 
 	array_init(return_value);
@@ -334,7 +334,7 @@ PHP_FUNCTION(yp_err_string)
 	char *string = NULL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &errcode) == FAILURE) {
-		RETURN_FALSE;
+        return;
 	}
 
 	if((string = yperr_string(errcode)) == NULL) {
