@@ -1,0 +1,101 @@
+<?php
+
+/**
+ * Get the default domain name.
+ *
+ * @return string|false the domain or false
+ */
+function yp_get_default_domain()
+{}
+
+/**
+ * Returns the order number for a map.
+ *
+ * @var string $domain YP domain name
+ * @var string $map YP map name
+ * @return integer|false the order number or false
+ */
+function yp_order($domain, $map)
+{}
+
+/**
+ * Returns the hostname for the machine on which the master YP server process
+ * for a map is running.
+ *
+ * @var string $domain YP domain name
+ * @var string $map YP map name
+ * @return string the machine name of the master
+ */
+function yp_master($domain, $map)
+{}
+
+/**
+ * Provides the value associated with the given key.
+ *
+ * @var string $domain YP domain name
+ * @var string $map YP map name
+ * @var string $key
+ * @return string|false the matched line or false
+ */
+function yp_match($domain, $map, $key)
+{}
+
+/**
+ * Provides the first key-value pair from the given map in the named domain.
+ *
+ * @var string $domain
+ * @var string $map
+ * @return array $var[$key] and the the line as the value
+ */
+function yp_first($domain, $map)
+{}
+
+/**
+ * Provides the next key-value pair in the given map.
+ *
+ * @var string $domain YP domain name
+ * @var string $map YP map name
+ * @var string $key
+ * @return array $var[$key] and the the line as the value
+ */
+function yp_next($domain, $map, $key)
+{}
+
+/**
+ * Provides a way to transfer an entire map from the server to the client
+ * process  with a single request.
+ *
+ * @var string $domain YP domain name
+ * @var string $map YP map name
+ * @var callable $callback
+ * @return bool
+ */
+function yp_all($domain, $map, $callback)
+{}
+
+/**
+ * Return an array containing the entire map
+ *
+ * @var string $domain YP domain name
+ * @var string $map YP map name
+ * @return array
+ */
+function yp_cat($domain, $map)
+{}
+
+/**
+ * Returns the error code from the last call or 0 if no error occured
+ *
+ * @return integer the error code
+ */
+function yp_errno()
+{}
+
+/**
+ * Returns the corresponding error string for the given error code
+ *
+ * @var integer $errorcode the error code
+ * @return string the error string
+ */
+function yp_err_string($errorcode)
+{}
