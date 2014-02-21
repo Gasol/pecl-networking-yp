@@ -11,6 +11,18 @@ of important administrative files (e.g. the password file).
  
  </description>
  <lead>
+  <name>Gasol Wu</name>
+  <user>gasolwu</user>
+  <email>gasolwu@php.net</email>
+  <active>yes</active>
+ </lead>
+ <lead>
+  <name>Pierre Joye</name>
+  <user>pajoye</user>
+  <email>pajoye@php.net</email>
+  <active>yes</active>
+ </lead>
+ <lead>
   <name>Stephanie Wehner</name>
   <user>???</user>
   <email>_@r4k.net</email>
