@@ -60,7 +60,7 @@ package.xml added to support intallation using pear installer
  <dependencies>
   <required>
    <php>
-    <min>5</min>
+    <min>5.3.0</min>
    </php>
    <pearinstaller>
     <min>1.4.0b1</min>
