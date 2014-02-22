@@ -26,13 +26,13 @@ of important administrative files (e.g. the password file).
   <name>Stephanie Wehner</name>
   <user>???</user>
   <email>_@r4k.net</email>
-  <active>yes</active>
+  <active>no</active>
  </lead>
  <lead>
   <name>Fredrik Ohrn</name>
   <user>???</user>
-  <email>???@php.net</email>
-  <active>yes</active>
+  <email>ohrn@chl.chalmers.se</email>
+  <active>no</active>
  </lead>
  <date>2009-11-05</date>
  <time>17:58:17</time>
