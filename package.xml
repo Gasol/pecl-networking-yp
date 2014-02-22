@@ -32,7 +32,7 @@ of important administrative files (e.g. the password file).
   <release>beta</release>
   <api>stable</api>
  </stability>
- <license uri="http://www.php.net/license">PHP</license>
+ <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
  <notes>Initial beta release
 
  - Fix build with modern PHP including PHP 5.3, 5.4 and 5.5 [gasolwu]
