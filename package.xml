@@ -34,19 +34,22 @@ of important administrative files (e.g. the password file).
   <email>ohrn@chl.chalmers.se</email>
   <active>no</active>
  </lead>
- <date>2009-11-05</date>
- <time>17:58:17</time>
+ <date>2014-02-22</date>
+ <time>11:45:47</time>
  <version>
-  <release>5.0.0rc1</release>
-  <api>5.0.0rc1</api>
+  <release>1.0.0RC1</release>
+  <api>1.0.0</api>
  </version>
  <stability>
   <release>beta</release>
-  <api>beta</api>
+  <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license">PHP</license>
- <notes>
-package.xml added to support intallation using pear installer
+ <notes>Initial beta release
+
+ - Fix build with modern PHP including PHP 5.3, 5.4 and 5.5 [gasolwu]
+ - Build testing environment with vagrants [gasolwu]
+ - Add tests for all public funcctions [gasolwu]
  </notes>
  <contents>
   <dir name="/">
@@ -90,4 +93,25 @@ package.xml added to support intallation using pear installer
  </dependencies>
  <providesextension>yp</providesextension>
  <extsrcrelease />
+ <changelog>
+  <release>
+   <date>2014-02-22</date>
+   <time>11:45:47</time>
+   <version>
+    <release>1.0.0RC1</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>Initial beta release
+
+    - Fix build with modern PHP including PHP 5.3, 5.4 and 5.5 [gasolwu]
+    - Build testing environment with vagrants [gasolwu]
+    - Add tests for all public funcctions [gasolwu]
+   </notes>
+  </release>
+ </changelog>
 </package>

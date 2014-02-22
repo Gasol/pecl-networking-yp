@@ -33,7 +33,7 @@
 extern zend_module_entry yp_module_entry;
 #define yp_module_ptr &yp_module_entry
 
-#define PHP_YP_VERSION "0.1.0-dev"
+#define PHP_YP_VERSION "1.0.0RC1"
 
 /* yp.c functions */
 PHP_FUNCTION(yp_get_default_domain);
