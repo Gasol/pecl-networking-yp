@@ -22,18 +22,6 @@ of important administrative files (e.g. the password file).
   <email>pajoye@php.net</email>
   <active>yes</active>
  </lead>
- <lead>
-  <name>Stephanie Wehner</name>
-  <user>???</user>
-  <email>_@r4k.net</email>
-  <active>no</active>
- </lead>
- <lead>
-  <name>Fredrik Ohrn</name>
-  <user>???</user>
-  <email>ohrn@chl.chalmers.se</email>
-  <active>no</active>
- </lead>
  <date>2014-02-22</date>
  <time>11:45:47</time>
  <version>
