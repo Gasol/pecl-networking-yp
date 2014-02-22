@@ -1,0 +1,2 @@
+- Add OO interface to yp
+- Integrate with travis-ci.org or drone.io to run tests automatically
