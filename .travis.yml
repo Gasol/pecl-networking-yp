@@ -13,7 +13,9 @@ before_script:
 install:
   - phpize
   - sed -i -re 's|-(@if test ! -z "\$\(PHP_EXECUTABLE\)")|\1|' Makefile.global
+  - egrep '^test:' -A 2 Makefile.global
   - ./configure
+  - egrep '^test:' -A 2 Makefile
   - make
 
 script: make test
