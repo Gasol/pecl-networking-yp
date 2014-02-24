@@ -4,7 +4,6 @@ yp_get_default_domain() function test
 <?php if (!extension_loaded('yp')) die('Skip yp extension not loaded'); ?>
 --FILE--
 <?php
-var_dump("test failed");
 var_dump(yp_get_default_domain());
 ?>
 --EXPECT--
