@@ -25,7 +25,7 @@ var_dump($groups);
 --EXPECTF--
 bool(true)
 
-Warning: yp_next(): No more records in map database in %s/tests/007-yp_first.php on line 10
+Warning: yp_next(): No more records in map database in %s/tests/007-yp_first-and-yp_next.php on line 10
 bool(false)
 bool(true)
 array(3) {
