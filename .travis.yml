@@ -12,7 +12,7 @@ before_script:
 
 install:
   - phpize
-  - sed -i'' -re 's|-(@if test ! -z "\$\(PHP_EXECUTABLE\)")|\1|' Makefile.global
+  - sed -i -re 's|-(@if test ! -z "\$\(PHP_EXECUTABLE\)")|\1|' Makefile.global
   - ./configure
   - make
 
