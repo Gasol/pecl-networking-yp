@@ -1,0 +1,3 @@
+vagrant:x:1000:
+puppet:x:1001:
+vboxsf:x:1002:
