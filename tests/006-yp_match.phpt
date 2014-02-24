@@ -8,8 +8,8 @@ $domain = yp_get_default_domain();
 var_dump(yp_match($domain, 'hosts.byaddr', '127.0.0.1'));
 var_dump(yp_match($domain, 'hosts.byaddr', '0.0.0.0')); // not exists
 ?>
---EXPECT--
+--EXPECTF--
 string(19) "127.0.0.1	localhost"
 
-Warning: yp_match(): No such key in map in /vagrant/tests/006-yp_match.php on line 4
+Warning: yp_match(): No such key in map in %s/tests/006-yp_match.php on line 4
 bool(false)

@@ -9,9 +9,9 @@ var_dump(yp_errno());
 var_dump(yp_next($domain, 'passwd.byname', 'vagrant'));
 var_dump(yp_errno());
 ?>
---EXPECT--
+--EXPECTF--
 int(0)
 
-Warning: yp_next(): No more records in map database in /vagrant/tests/009-yp_errno.php on line 4
+Warning: yp_next(): No more records in map database in %s/tests/009-yp_errno.php on line 4
 bool(false)
 int(8)

@@ -5,7 +5,8 @@ yp_master() function test
 --FILE--
 <?php
 $domain = yp_get_default_domain();
-var_dump(yp_master($domain, 'hosts.byaddr'));
+$same = gethostname() == yp_master($domain, 'hosts.byaddr');
+var_dump($same);
 ?>
 --EXPECT--
-string(9) "precise32"
+bool(true)
