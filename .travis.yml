@@ -12,12 +12,8 @@ before_script:
 
 install:
   - phpize
-  - sed -i -re 's|-(@if test ! -z "\$\(PHP_EXECUTABLE\)")|\1|' Makefile.global
-  - sed -i -re '/TESTS/a \\t\tTEST_RESULT_EXIT_CODE=$$?; \\' Makefile.global
-  - sed -i -re '/rm \$\(top_builddir\)\/tmp-php\.ini; \\/a \\t\texit $$TEST_RESULT_EXIT_CODE; \\' Makefile.global
-  - egrep '^test:' -A 12 Makefile.global
+  - sh tests/patch-Makefile_global.sh
   - ./configure
-  - egrep '^test:' -A 12 Makefile
   - make
 
 script: make test
