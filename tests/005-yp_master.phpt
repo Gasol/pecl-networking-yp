@@ -5,10 +5,8 @@ yp_master() function test
 --FILE--
 <?php
 $domain = yp_get_default_domain();
-var_dump(gethostname());
 var_dump(yp_master($domain, 'hosts.byaddr'));
-$same = gethostname() == yp_master($domain, 'hosts.byaddr');
-var_dump($same);
 ?>
---EXPECT--
-bool(true)
+--EXPECTF--
+string(%d) "%s"
+
