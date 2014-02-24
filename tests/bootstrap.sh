@@ -8,7 +8,7 @@ sudo service ypserv start
 sudo expect -c '
 spawn /usr/lib/yp/ypinit -m
 expect "<control D>"
-send ""
+send "precise32"
 expect "Is this correct?"
 send "\n"
 expect eof
