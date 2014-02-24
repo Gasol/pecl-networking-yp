@@ -12,7 +12,6 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y expect php5-cli php5-dev 
 sudo sed -i'' -re 's/NISSERVER=(.*)/NISSERVER=true/' /etc/default/nis
 sudo sed -i'' -re "s|(YPSRCDIR = ).*|\\1$YPSRCDIR|" /var/yp/Makefile
 sudo sed -i'' -re "s|(YPPWDDIR = ).*|\\1$YPSRCDIR|" /var/yp/Makefile
-sudo sed -i'' -re 's|-(@if test ! -z "\$\(PHP_EXECUTABLE\)")|\1|' $HOME/.phpenv/versions/$(phpenv version-name)/lib/php/build/Makefile.global
 sudo service ypserv start
 sudo expect -c '
 spawn /usr/lib/yp/ypinit -m
