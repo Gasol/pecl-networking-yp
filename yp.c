@@ -41,17 +41,66 @@ PHP_YP_API php_yp_globals yp_globals;
 
 /* }}} */
 
+/* {{{ arginfo */
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_get_default_domain, 0, ZEND_RETURN_VALUE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_order, 0, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_INFO(0, domain)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_master, 0, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_INFO(0, domain)
+	ZEND_ARG_INFO(0, mapname)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_match, 0, ZEND_RETURN_VALUE, 3)
+	ZEND_ARG_INFO(0, domain)
+	ZEND_ARG_INFO(0, mapname)
+	ZEND_ARG_INFO(0, key)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_first, 0, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_INFO(0, domain)
+	ZEND_ARG_INFO(0, mapname)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_next, 0, ZEND_RETURN_VALUE, 3)
+	ZEND_ARG_INFO(0, domain)
+	ZEND_ARG_INFO(0, mapname)
+	ZEND_ARG_INFO(0, key)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_all, 0, ZEND_RETURN_VALUE, 3)
+	ZEND_ARG_INFO(0, domain)
+	ZEND_ARG_INFO(0, mapname)
+	ZEND_ARG_INFO(0, callback)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_cat, 0, ZEND_RETURN_VALUE, 2)
+	ZEND_ARG_INFO(0, domain)
+	ZEND_ARG_INFO(0, mapname)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_errno, 0, ZEND_RETURN_VALUE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_err_string, 0, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_INFO(0, errorcode)
+ZEND_END_ARG_INFO()
+/* }}} */
+
 zend_function_entry yp_functions[] = {
-	PHP_FE(yp_get_default_domain, NULL)
-	PHP_FE(yp_order, NULL)
-	PHP_FE(yp_master, NULL)
-	PHP_FE(yp_match, NULL)
-	PHP_FE(yp_first, NULL)
-	PHP_FE(yp_next, NULL)
-	PHP_FE(yp_all, NULL)
-	PHP_FE(yp_cat, NULL)
-	PHP_FE(yp_errno, NULL)
-	PHP_FE(yp_err_string, NULL)
+	PHP_FE(yp_get_default_domain, arginfo_yp_get_default_domain)
+	PHP_FE(yp_order, arginfo_yp_order)
+	PHP_FE(yp_master, arginfo_yp_master)
+	PHP_FE(yp_match, arginfo_yp_match)
+	PHP_FE(yp_first, arginfo_yp_first)
+	PHP_FE(yp_next, arginfo_yp_next)
+	PHP_FE(yp_all, arginfo_yp_all)
+	PHP_FE(yp_cat, arginfo_yp_cat)
+	PHP_FE(yp_errno, arginfo_yp_errno)
+	PHP_FE(yp_err_string, arginfo_yp_err_string)
 	{NULL, NULL, NULL}
 };
 
