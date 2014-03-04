@@ -31,6 +31,10 @@
 
 #include <rpcsvc/ypclnt.h>
 
+#ifndef PHP_FE_END
+#define PHP_FE_END	{NULL, NULL, NULL, 0, 0}
+#endif
+
 /* {{{ thread safety stuff */
 
 #ifdef ZTS
@@ -101,7 +105,7 @@ zend_function_entry yp_functions[] = {
 	PHP_FE(yp_cat, arginfo_yp_cat)
 	PHP_FE(yp_errno, arginfo_yp_errno)
 	PHP_FE(yp_err_string, arginfo_yp_err_string)
-	{NULL, NULL, NULL}
+	PHP_FE_END
 };
 
 zend_module_entry yp_module_entry = {
