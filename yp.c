@@ -123,6 +123,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_class_next, 0, ZEND_RETURN_VALUE, 2)
 	ZEND_ARG_INFO(0, mapname)
 	ZEND_ARG_INFO(0, key)
 ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_class_order, 0, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_INFO(0, mapname)
+ZEND_END_ARG_INFO()
 /* }}} */
 
 zend_function_entry yp_functions[] = {
@@ -316,6 +320,39 @@ PHP_METHOD(YP, next)
 }
 /* }}} */
 
+/* {{{ proto int NIS\YP::order(string mapname) */
+PHP_METHOD(YP, order)
+{
+	zval *obj = NULL, *prop = NULL;
+	char *domain = NULL, *mapname = NULL;
+	int domain_len = 0, mapname_len = 0, error = 0;
+
+#if SOLARIS_YP
+	unsigned long outval = 0;
+#else
+	int outval = 0;
+#endif
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s",
+				&mapname, &mapname_len) == FAILURE) {
+		return;
+	}
+
+	obj = getThis();
+	prop = zend_read_property(yp_ce_YP, obj, "domain", sizeof("domain") - 1, 0 TSRMLS_CC);
+	domain = Z_STRVAL_P(prop);
+
+	error = yp_order(domain, mapname, &outval);
+
+	if (error) {
+		zend_throw_exception_ex(yp_ce_YPException, error TSRMLS_CC, yperr_string(error));
+		return;
+	}
+
+	RETVAL_LONG(outval);
+}
+/* }}} */
+
 static const zend_function_entry yp_YP_methods[] = {
 	PHP_ME(YP, __construct, arginfo_yp_class_construct, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
 	PHP_ME(YP, getDomain, arginfo_yp_class_getDomain, ZEND_ACC_PUBLIC)
@@ -324,6 +361,7 @@ static const zend_function_entry yp_YP_methods[] = {
 	PHP_ME(YP, match, arginfo_yp_class_match, ZEND_ACC_PUBLIC)
 	PHP_ME(YP, first, arginfo_yp_class_first, ZEND_ACC_PUBLIC)
 	PHP_ME(YP, next, arginfo_yp_class_next, ZEND_ACC_PUBLIC)
+	PHP_ME(YP, order, arginfo_yp_class_order, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
 
