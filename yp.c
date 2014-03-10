@@ -105,6 +105,10 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_class_setDomain, 0, ZEND_RETURN_VALUE, 1)
 	ZEND_ARG_INFO(0, domain)
 ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_class_cat, 0, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_INFO(0, mapname)
+ZEND_END_ARG_INFO()
 /* }}} */
 
 zend_function_entry yp_functions[] = {
@@ -123,6 +127,7 @@ zend_function_entry yp_functions[] = {
 
 zend_class_entry *yp_ce_YP;
 zend_class_entry *yp_ce_YPException;
+static int php_foreach_cat(int instatus, char *inkey, int inkeylen, char *inval, int invallen, char *indata);
 
 /* {{{ proto void NIS\YP::__construct(string domain) */
 PHP_METHOD(YP, __construct)
@@ -189,6 +194,28 @@ PHP_METHOD(YP, setDomain)
 /* {{{ proto array NIS\YP::cat(string map) */
 PHP_METHOD(YP, cat)
 {
+	zval *obj = NULL;
+	zval *prop = NULL;
+	char *domain = NULL;
+	char *mapname = NULL;
+	int mapname_len = 0;
+	struct ypall_callback callback;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s",
+				&mapname, &mapname_len) == FAILURE) {
+		return;
+	}
+
+	obj = getThis();
+
+	array_init(return_value);
+
+	callback.foreach = php_foreach_cat;
+	callback.data = (char *) return_value;
+
+	prop = zend_read_property(yp_ce_YP, obj, "domain", sizeof("domain") - 1, 0 TSRMLS_CC);
+	domain = Z_STRVAL_P(prop);
+	yp_all(domain, mapname, &callback);
 }
 /* }}} */
 
@@ -196,6 +223,7 @@ static const zend_function_entry yp_YP_methods[] = {
 	PHP_ME(YP, __construct, arginfo_yp_class_construct, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
 	PHP_ME(YP, getDomain, arginfo_yp_class_getDomain, ZEND_ACC_PUBLIC)
 	PHP_ME(YP, setDomain, arginfo_yp_class_setDomain, ZEND_ACC_PUBLIC)
+	PHP_ME(YP, cat, arginfo_yp_class_cat, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
 
