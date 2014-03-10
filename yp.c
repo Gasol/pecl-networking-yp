@@ -24,10 +24,12 @@
 
 #include "php.h"
 #include "ext/standard/info.h"
+#include "zend_exceptions.h"
 
 #if HAVE_YP
 
 #include "php_yp.h"
+#include "ext/spl/spl_exceptions.h"
 
 #include <rpcsvc/ypclnt.h>
 
@@ -92,6 +94,17 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_err_string, 0, ZEND_RETURN_VALUE, 1)
 	ZEND_ARG_INFO(0, errorcode)
 ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_class_construct, 0, ZEND_RETURN_VALUE, 0)
+	ZEND_ARG_INFO(0, domain)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_class_getDomain, 0, ZEND_RETURN_VALUE, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_class_setDomain, 0, ZEND_RETURN_VALUE, 1)
+	ZEND_ARG_INFO(0, domain)
+ZEND_END_ARG_INFO()
 /* }}} */
 
 zend_function_entry yp_functions[] = {
@@ -107,6 +120,89 @@ zend_function_entry yp_functions[] = {
 	PHP_FE(yp_err_string, arginfo_yp_err_string)
 	PHP_FE_END
 };
+
+zend_class_entry *yp_ce_YP;
+zend_class_entry *yp_ce_YPException;
+
+/* {{{ proto void NIS\YP::__construct(string domain) */
+PHP_METHOD(YP, __construct)
+{
+	zval *obj = NULL;
+	char *domain = NULL;
+	int domain_len = 0;
+	int error = 0;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|s!",
+				&domain, &domain_len) == FAILURE) {
+		return;
+	}
+
+	if (!domain) {
+		error = yp_get_default_domain(&domain);
+		if (error) {
+			zend_throw_exception_ex(yp_ce_YPException, error TSRMLS_CC, yperr_string(error));
+			return;
+		}
+		domain_len = strlen(domain);
+	}
+
+	obj = getThis();
+	zend_update_property_stringl(yp_ce_YP, obj, "domain", sizeof("domain") - 1,
+			domain, domain_len TSRMLS_DC);
+}
+/* }}} */
+
+/* {{{ proto string NIS\YP::getDomain(void) */
+PHP_METHOD(YP, getDomain)
+{
+	zval *obj = NULL;
+	zval *prop = NULL;
+
+	if (ZEND_NUM_ARGS()) {
+		WRONG_PARAM_COUNT;
+	}
+
+	obj = getThis();
+	prop = zend_read_property(yp_ce_YP, obj, "domain", sizeof("domain") - 1, 1 TSRMLS_CC);
+	RETURN_STRINGL(estrdup(Z_STRVAL_P(prop)), Z_STRLEN_P(prop), 0);
+}
+/* }}} */
+
+/* {{{ proto void NIS\YP::getDomain(string domain) */
+PHP_METHOD(YP, setDomain)
+{
+	zval *obj = NULL;
+	char *domain = NULL;
+	int domain_len = 0;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s",
+				&domain, &domain_len) == FAILURE) {
+		return;
+	}
+
+	obj = getThis();
+	zend_update_property_stringl(yp_ce_YP, obj, "domain", sizeof("domain") - 1,
+			domain, domain_len TSRMLS_DC);
+}
+/* }}} */
+
+/* {{{ proto array NIS\YP::cat(string map) */
+PHP_METHOD(YP, cat)
+{
+}
+/* }}} */
+
+static const zend_function_entry yp_YP_methods[] = {
+	PHP_ME(YP, __construct, arginfo_yp_class_construct, ZEND_ACC_PUBLIC | ZEND_ACC_CTOR)
+	PHP_ME(YP, getDomain, arginfo_yp_class_getDomain, ZEND_ACC_PUBLIC)
+	PHP_ME(YP, setDomain, arginfo_yp_class_setDomain, ZEND_ACC_PUBLIC)
+	PHP_FE_END
+};
+
+static const zend_function_entry yp_YPException_methods[] = {
+	PHP_FE_END
+};
+
 
 zend_module_entry yp_module_entry = {
 	STANDARD_MODULE_HEADER,
@@ -422,6 +518,15 @@ PHP_MINIT_FUNCTION(yp)
 	REGISTER_LONG_CONSTANT("YPERR_YPERR", YPERR_YPERR, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("YPERR_YPSERV", YPERR_YPSERV, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("YPERR_VERS", YPERR_VERS, CONST_CS | CONST_PERSISTENT);
+
+	zend_class_entry ce;
+	INIT_NS_CLASS_ENTRY(ce, "NIS", "YP", yp_YP_methods);
+	yp_ce_YP = zend_register_internal_class(&ce TSRMLS_CC);
+	zend_declare_property_null(yp_ce_YP, "domain", sizeof("domain") - 1, ZEND_ACC_PROTECTED TSRMLS_CC);
+
+	INIT_NS_CLASS_ENTRY(ce, "NIS", "YPException", yp_YPException_methods);
+	yp_ce_YPException = zend_register_internal_class_ex(&ce, spl_ce_RuntimeException, NULL TSRMLS_CC);
+
 
 	return SUCCESS;
 }
