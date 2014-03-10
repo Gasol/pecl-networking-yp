@@ -177,7 +177,7 @@ PHP_METHOD(YP, __construct)
 
 	obj = getThis();
 	zend_update_property_stringl(yp_ce_YP, obj, "domain", sizeof("domain") - 1,
-			domain, domain_len TSRMLS_DC);
+			domain, domain_len TSRMLS_CC);
 }
 /* }}} */
 
@@ -211,7 +211,7 @@ PHP_METHOD(YP, setDomain)
 
 	obj = getThis();
 	zend_update_property_stringl(yp_ce_YP, obj, "domain", sizeof("domain") - 1,
-			domain, domain_len TSRMLS_DC);
+			domain, domain_len TSRMLS_CC);
 }
 /* }}} */
 
