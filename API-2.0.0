@@ -1,0 +1,11 @@
+<?php
+
+$yp = new NIS\YP($domain = NULL);
+$yp->getDomain();
+$yp->setDomain($domain);
+$yp->all($mapname, $callback);
+$yp->first($mapname);
+$yp->next($mapname, $key);
+$yp->order($mapname);
+$yp->cat($mapname);
+$yp->match($mapname, $key);
