@@ -152,10 +152,14 @@ PHP_FUNCTION(yp_match)
 
 	if((YP(error) = yp_match(domain, map, key, key_len, &outval, &outvallen))) {
 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", yperr_string (YP(error)));
-		RETURN_FALSE;
+		RETVAL_FALSE;
+	} else {
+		RETVAL_STRINGL(outval, outvallen, 1);
 	}
 
-	RETVAL_STRINGL(outval, outvallen, 1);
+	if (outval) {
+		free(outval);
+	}
 }
 /* }}} */
 
@@ -173,11 +177,15 @@ PHP_FUNCTION(yp_first)
 
 	if((YP(error) = yp_first(domain, map, &outkey, &outkey_len, &outval, &outval_len))) {
 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", yperr_string (YP(error)));
-		RETURN_FALSE;
+		RETVAL_FALSE;
+	} else {
+		array_init(return_value);
+		add_assoc_stringl_ex(return_value, outkey, outkey_len + 1, outval, outval_len, 1);
 	}
 
-	array_init(return_value);
-	add_assoc_stringl_ex(return_value, outkey, outkey_len + 1, outval, outval_len, 1);
+	if (outval) {
+		free(outval);
+	}
 }
 /* }}} */
 
@@ -197,11 +205,15 @@ PHP_FUNCTION(yp_next)
 
 	if((YP(error) = yp_next(domain, map, key, key_len, &outkey, &outkey_len, &outval, &outval_len))) {
 		php_error_docref(NULL TSRMLS_CC, E_WARNING, "%s", yperr_string (YP(error)));
-		RETURN_FALSE;
-	}
+		RETVAL_FALSE;
+	} else {
+		array_init(return_value);
+		add_assoc_stringl_ex(return_value, outkey, outkey_len + 1, outval, outval_len, 1);
+    }
 
-	array_init(return_value);
-	add_assoc_stringl_ex(return_value, outkey, outkey_len + 1, outval, outval_len, 1);
+	if (outval) {
+		free(outval);
+	}
 }
 /* }}} */
 
