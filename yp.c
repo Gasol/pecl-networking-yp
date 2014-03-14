@@ -263,10 +263,13 @@ PHP_METHOD(YP, match)
 	error = yp_match(domain, mapname, key, key_len, &outval, &outvallen);
 	if (error) {
 		zend_throw_exception_ex(yp_ce_YPException, error TSRMLS_CC, yperr_string(error));
-		return;
+	} else {
+		RETVAL_STRINGL(outval, outvallen, 1);
 	}
 
-	RETVAL_STRINGL(outval, outvallen, 1);
+	if (outval) {
+		free(outval);
+	}
 }
 /* }}} */
 
@@ -289,11 +292,14 @@ PHP_METHOD(YP, first)
 	error = yp_first(domain, mapname, &outkey, &outkey_len, &outval, &outval_len);
 	if (error) {
 		zend_throw_exception_ex(yp_ce_YPException, error TSRMLS_CC, yperr_string(error));
-		return;
+	} else {
+		array_init(return_value);
+		add_assoc_stringl_ex(return_value, outkey, outkey_len + 1, outval, outval_len, 1);
 	}
 
-	array_init(return_value);
-	add_assoc_stringl_ex(return_value, outkey, outkey_len + 1, outval, outval_len, 1);
+	if (outval) {
+		free(outval);
+	}
 }
 /* }}} */
 
@@ -318,11 +324,14 @@ PHP_METHOD(YP, next)
 	error = yp_next(domain, mapname, key, key_len, &outkey, &outkey_len, &outval, &outval_len);
 	if (error) {
 		zend_throw_exception_ex(yp_ce_YPException, error TSRMLS_CC, yperr_string(error));
-		return;
+	} else {
+		array_init(return_value);
+		add_assoc_stringl_ex(return_value, outkey, outkey_len + 1, outval, outval_len, 1);
 	}
 
-	array_init(return_value);
-	add_assoc_stringl_ex(return_value, outkey, outkey_len + 1, outval, outval_len, 1);
+	if (outval) {
+		free(outval);
+	}
 }
 /* }}} */
 
