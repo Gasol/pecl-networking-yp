@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.9.0" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
-http://pear.php.net/dtd/tasks-1.0.xsd
-http://pear.php.net/dtd/package-2.0
-http://pear.php.net/dtd/package-2.0.xsd">
+<package version="2.1" xmlns="http://pear.php.net/dtd/package-2.1" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.1     http://pear.php.net/dtd/package-2.1.xsd">
  <name>yp</name>
  <channel>pecl.php.net</channel>
  <summary>YP/NIS functions</summary>
@@ -22,43 +19,54 @@ of important administrative files (e.g. the password file).
   <email>pajoye@php.net</email>
   <active>yes</active>
  </lead>
- <date>2014-02-22</date>
- <time>11:45:47</time>
+ <date>2014-05-11</date>
+ <time>21:38:23</time>
  <version>
-  <release>1.0.0RC1</release>
+  <release>1.0.0</release>
   <api>1.0.0</api>
  </version>
  <stability>
-  <release>beta</release>
+  <release>stable</release>
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
- <notes>Initial beta release
+ <notes>Initial stable release
 
  - Fix build with modern PHP including PHP 5.3, 5.4 and 5.5 [gasolwu]
  - Build testing environment with vagrants [gasolwu]
- - Add tests for all public funcctions [gasolwu]
- </notes>
+ - Add tests for all public functions [gasolwu]
+ - Fix bugs #59537 [gasolwu]
+ - Correct constant value of YPERR_ACCESS [gasolwu]
+</notes>
  <contents>
   <dir name="/">
    <file role="doc" name="API-1.0.0"/>
    <file role="doc" name="CREDITS"/>
    <file role="doc" name="LICENSE"/>
-   <file role="doc" name="README"/>
-   <file role="doc" name="RELEASE-1.0.0RC1"/>
+   <file role="doc" name="README.md"/>
+   <file role="doc" name="RELEASE-1.0.0"/>
    <file role="doc" name="TODO"/>
    <dir name="tests">
+    <dir name="data">
+     <file role="test" name="group"/>
+     <file role="test" name="hosts"/>
+     <file role="test" name="netgroup"/>
+     <file role="test" name="passwd"/>
+     <file role="test" name="protocols"/>
+     <file role="test" name="rpc"/>
+     <file role="test" name="services"/>
+    </dir>
     <file role="test" name="001-yp_get_default_domain.phpt"/>
     <file role="test" name="002-yp_all.phpt"/>
     <file role="test" name="003-yp_order.phpt"/>
     <file role="test" name="004-yp_cat.phpt"/>
     <file role="test" name="005-yp_master.phpt"/>
     <file role="test" name="006-yp_match.phpt"/>
-    <file role="test" name="007-yp_first.phpt"/>
-    <file role="test" name="008-yp_next.phpt"/>
+    <file role="test" name="007-yp_first-and-yp_next.phpt"/>
     <file role="test" name="009-yp_errno.phpt"/>
     <file role="test" name="010-yp_err_string.phpt"/>
     <file role="test" name="bootstrap.sh"/>
+    <file role="test" name="patch-Makefile_global.sh"/>
    </dir>
    <file role="src" name="config.m4"/>
    <file role="src" name="php_yp.h"/>
@@ -80,7 +88,7 @@ of important administrative files (e.g. the password file).
   </required>
  </dependencies>
  <providesextension>yp</providesextension>
- <extsrcrelease />
+ <extsrcrelease/>
  <changelog>
   <release>
    <date>2014-02-22</date>
@@ -98,7 +106,7 @@ of important administrative files (e.g. the password file).
 
     - Fix build with modern PHP including PHP 5.3, 5.4 and 5.5 [gasolwu]
     - Build testing environment with vagrants [gasolwu]
-    - Add tests for all public funcctions [gasolwu]
+    - Add tests for all public functions [gasolwu]
    </notes>
   </release>
  </changelog>

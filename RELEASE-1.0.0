@@ -1,0 +1,7 @@
+Initial stable release
+
+ - Fix build with modern PHP including PHP 5.3, 5.4 and 5.5 [gasolwu]
+ - Build testing environment with vagrants [gasolwu]
+ - Add tests for all public functions [gasolwu]
+ - Fix bugs #59537 [gasolwu]
+ - Correct constant value of YPERR_ACCESS [gasolwu]
