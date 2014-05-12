@@ -40,7 +40,7 @@ of important administrative files (e.g. the password file).
    <file role="doc" name="CREDITS"/>
    <file role="doc" name="LICENSE"/>
    <file role="doc" name="README.md"/>
-   <file role="doc" name="RELEASE-1.0.0"/>
+   <file role="doc" name="RELEASE-1.0.1"/>
    <file role="doc" name="TODO"/>
    <dir name="tests">
     <dir name="data">
