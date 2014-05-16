@@ -291,7 +291,7 @@ PHP_FUNCTION(yp_all)
 	}
 
 	callback.foreach = php_foreach_all;
-	callback.data = foreach_cb;
+	callback.data = (void *)foreach_cb;
 
 	yp_all(domain, map, &callback);
 
