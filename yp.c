@@ -41,18 +41,46 @@ PHP_YP_API php_yp_globals yp_globals;
 
 /* }}} */
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_none, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_domain_map, 0, 0, 2)
+	ZEND_ARG_INFO(0, domain)
+	ZEND_ARG_INFO(0, map)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_domain_map_key, 0, 0, 3)
+	ZEND_ARG_INFO(0, domain)
+	ZEND_ARG_INFO(0, map)
+	ZEND_ARG_INFO(0, key)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_domain_map_cb, 0, 0, 3)
+	ZEND_ARG_INFO(0, domain)
+	ZEND_ARG_INFO(0, map)
+	ZEND_ARG_INFO(0, callback)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_yp_errorcode, 0, 0, 1)
+	ZEND_ARG_INFO(0, errorcode)
+ZEND_END_ARG_INFO()
+
 zend_function_entry yp_functions[] = {
-	PHP_FE(yp_get_default_domain, NULL)
-	PHP_FE(yp_order, NULL)
-	PHP_FE(yp_master, NULL)
-	PHP_FE(yp_match, NULL)
-	PHP_FE(yp_first, NULL)
-	PHP_FE(yp_next, NULL)
-	PHP_FE(yp_all, NULL)
-	PHP_FE(yp_cat, NULL)
-	PHP_FE(yp_errno, NULL)
-	PHP_FE(yp_err_string, NULL)
+	PHP_FE(yp_get_default_domain, arginfo_yp_none)
+	PHP_FE(yp_order,              arginfo_yp_domain_map)
+	PHP_FE(yp_master,             arginfo_yp_domain_map)
+	PHP_FE(yp_match,              arginfo_yp_domain_map_key)
+	PHP_FE(yp_first,              arginfo_yp_domain_map)
+	PHP_FE(yp_next,               arginfo_yp_domain_map_key)
+	PHP_FE(yp_all,                arginfo_yp_domain_map_cb)
+	PHP_FE(yp_cat,                arginfo_yp_domain_map)
+	PHP_FE(yp_errno,              arginfo_yp_none)
+	PHP_FE(yp_err_string,         arginfo_yp_errorcode)
+#ifdef PHP_FE_END
+	PHP_FE_END
+#else
 	{NULL, NULL, NULL}
+#endif
 };
 
 zend_module_entry yp_module_entry = {
