@@ -128,7 +128,7 @@ PHP_FUNCTION(yp_order)
 #if SOLARIS_YP
 	unsigned long outval = 0;
 #else
-	int outval = 0;
+	unsigned int outval = 0;
 #endif
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss",
@@ -370,8 +370,8 @@ PHP_FUNCTION(yp_errno)
    Returns the corresponding error string for the given error code */
 PHP_FUNCTION(yp_err_string)
 {
-	int errcode = 0;
-	char *string = NULL;
+	long errcode = 0;
+	const char *string = NULL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &errcode) == FAILURE) {
         return;
