@@ -150,7 +150,7 @@ PHP_FUNCTION(yp_order)
 PHP_FUNCTION(yp_master)
 {
 	char *domain = NULL, *map = NULL, *outname = NULL;
-	int domain_len = 0, map_len = 0;
+	size_t domain_len = 0, map_len = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss",
 				&domain, &domain_len, &map, &map_len) == FAILURE) {
@@ -196,7 +196,8 @@ PHP_FUNCTION(yp_match)
 PHP_FUNCTION(yp_first)
 {
 	char *domain = NULL, *map = NULL, *outkey = NULL, *outval = NULL;
-	int domain_len = 0, map_len = 0, outkey_len, outval_len;
+	size_t domain_len = 0, map_len = 0;
+	int outkey_len, outval_len;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss",
 				&domain, &domain_len, &map, &map_len) == FAILURE) {
@@ -208,12 +209,11 @@ PHP_FUNCTION(yp_first)
 		RETVAL_FALSE;
 	} else {
 		array_init(return_value);
-		add_assoc_stringl_ex(return_value, outkey, outkey_len + 1, outval, outval_len);
+		add_assoc_stringl_ex(return_value, outkey, outkey_len, outval, outval_len);
 	}
 
-	if (outval) {
-		free(outval);
-	}
+	free(outkey);
+	free(outval);
 }
 /* }}} */
 
@@ -222,7 +222,7 @@ PHP_FUNCTION(yp_first)
 PHP_FUNCTION(yp_next)
 {
 	char *domain = NULL, *map = NULL, *key = NULL;
-	int domain_len = 0, map_len = 0, key_len = 0;
+	size_t domain_len = 0, map_len = 0, key_len = 0;
 	char *outkey = NULL, *outval = NULL;
 	int outkey_len = 0, outval_len = 0;
 
@@ -236,12 +236,11 @@ PHP_FUNCTION(yp_next)
 		RETVAL_FALSE;
 	} else {
 		array_init(return_value);
-		add_assoc_stringl_ex(return_value, outkey, outkey_len + 1, outval, outval_len);
+		add_assoc_stringl_ex(return_value, outkey, outkey_len, outval, outval_len);
 	}
 
-	if (outval) {
-		free(outval);
-	}
+	free(outval);
+	free(outkey);
 }
 /* }}} */
 
@@ -250,25 +249,20 @@ PHP_FUNCTION(yp_next)
 static int php_foreach_all (int instatus, char *inkey, int inkeylen, char *inval, int invallen, char *indata)
 {
 	int is_stop = 0;
-	zval *args;
-	zval *retval;
+	zval args;
+	zval retval;
 	TSRMLS_FETCH();
 
-	MAKE_STD_ZVAL(args);
-	array_init(args);
-	add_index_long(args, 0, instatus);
-	add_index_stringl(args, 1, inkey, inkeylen);
-	add_index_stringl(args, 2, inval, invallen);
+	array_init(&args);
+	add_index_long(&args, 0, instatus);
+	add_index_stringl(&args, 1, inkey, inkeylen);
+	add_index_stringl(&args, 2, inval, invallen);
 
 	php_yp_all_callback *cb = (php_yp_all_callback *) indata;
-	zend_fcall_info_args(&cb->fci, args TSRMLS_CC);
-	zend_fcall_info_call(&cb->fci, &cb->fcc, &retval, args TSRMLS_CC);
-	zend_fcall_info_args_clear(&cb->fci, 1);
+	zend_fcall_info_call(&cb->fci, &cb->fcc, &retval, &args TSRMLS_CC);
 
-	if (retval) {
-		is_stop = zval_is_true(retval);
-		zval_ptr_dtor(&retval);
-	}
+	is_stop = zval_is_true(&retval);
+	zval_ptr_dtor(&retval);
 
 	return is_stop;
 }
@@ -279,23 +273,23 @@ static int php_foreach_all (int instatus, char *inkey, int inkeylen, char *inval
 PHP_FUNCTION(yp_all)
 {
 	char *domain = NULL, *map = NULL;
-	int domain_len = 0, map_len = 0;
-	php_yp_all_callback *foreach_cb = emalloc(sizeof(php_yp_all_callback));
+	size_t domain_len = 0, map_len = 0;
+	php_yp_all_callback foreach_cb;
 
 	struct ypall_callback callback;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssf",
 				&domain, &domain_len, &map, &map_len,
-				&foreach_cb->fci, &foreach_cb->fcc) == FAILURE) {
+				&foreach_cb.fci, &foreach_cb.fcc) == FAILURE) {
 		return;
 	}
 
-	callback.foreach = php_foreach_all;
-	callback.data = (void *)foreach_cb;
+	callback.foreach = &php_foreach_all;
+	callback.data = (void *) &foreach_cb;
 
-	yp_all(domain, map, &callback);
 
-	efree(foreach_cb);
+	yp_all(estrdup(domain), map, &callback);
+
 	RETURN_FALSE;
 }
 /* }}} */
@@ -304,18 +298,11 @@ PHP_FUNCTION(yp_all)
  */
 static int php_foreach_cat (int instatus, char *inkey, int inkeylen, char *inval, int invallen, char *indata)
 {
-	int err;
-
-	err = ypprot_err (instatus);
-
+	int err = ypprot_err (instatus);
+	zval *return_value = (zval *) indata;
 	if (!err)
 	{
-		if (inkeylen) {
-			char *key = emalloc(inkeylen+1);
-			strlcpy(key, inkey, inkeylen+1);
-			add_assoc_stringl_ex((zval *) indata, key, inkeylen+1, inval, invallen);
-			efree(key);
-		}
+		add_assoc_stringl_ex(return_value, inkey, inkeylen, inval, invallen);
 
 		return 0;
 	}
@@ -337,7 +324,7 @@ static int php_foreach_cat (int instatus, char *inkey, int inkeylen, char *inval
 PHP_FUNCTION(yp_cat)
 {
 	char *domain = NULL, *map = NULL;
-	int domain_len = 0, map_len = 0;
+	size_t domain_len = 0, map_len = 0;
 	struct ypall_callback callback;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss",
@@ -370,7 +357,7 @@ PHP_FUNCTION(yp_errno)
    Returns the corresponding error string for the given error code */
 PHP_FUNCTION(yp_err_string)
 {
-	long errcode = 0;
+	zend_long errcode;
 	const char *string = NULL;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &errcode) == FAILURE) {
